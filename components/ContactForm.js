@@ -109,7 +109,7 @@ export default function ContactForm() {
             </p>
 
             {/* Contact Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-8">
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={info.title}
@@ -117,20 +117,19 @@ export default function ContactForm() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-dark-200 rounded-xl p-5 hover:bg-dark-100 transition-colors"
+                  className="bg-dark-200 rounded-xl p-4 hover:bg-dark-100 transition-colors"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="p-2 bg-primary-600/20 rounded-lg">
-                      <info.icon size={20} className="text-primary-500" />
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-primary-600/20 rounded-lg shrink-0">
+                      <info.icon size={22} className="text-primary-500" />
                     </div>
-                    <div>
-                      <h4 className="text-white font-semibold mb-1">{info.title}</h4>
+                    <div className="min-w-0">
+                      <h4 className="text-white font-semibold text-sm mb-0.5">{info.title}</h4>
                       {info.details.map((detail) => (
-                        <p key={detail} className="text-gray-300 text-sm">
+                        <p key={detail} className="text-gray-300 text-xs leading-tight">
                           {detail}
                         </p>
                       ))}
-                      <p className="text-gray-500 text-xs mt-1">{info.subtext}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -292,7 +291,7 @@ export default function ContactForm() {
                           value={method}
                           checked={formData.preferredContact === method}
                           onChange={handleChange}
-                          className="w-4 h-4 text-primary-500 focus:ring-primary-500"
+                          className="w-4 h-4 text-primary-500 focus:ring-primary-500 rounded-full"
                         />
                         <span className="text-gray-300 capitalize">{method}</span>
                       </label>
