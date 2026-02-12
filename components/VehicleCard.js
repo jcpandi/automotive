@@ -65,7 +65,7 @@ export default function VehicleCard({ vehicle, index = 0 }) {
     featuredImage,
   } = fields;
 
-  const imageUrl = featuredImage?.sourceUrl || '/images/placeholder-vehicle.jpg';
+  const imageUrl = featuredImage?.sourceUrl || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&q=80';
   const type = fields.type || 'Sedan';
   const typeColor = vehicleTypes[type] || 'bg-gray-500';
   const fuelIcon = fuelIcons[fuelType] || '⛽';

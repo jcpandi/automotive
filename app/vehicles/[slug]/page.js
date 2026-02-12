@@ -92,7 +92,7 @@ export default function VehicleDetailPage({ params }) {
       <section className="relative pt-20">
         <div className="h-[60vh] relative overflow-hidden">
           <img
-            src={featuredImage?.sourceUrl}
+            src={featuredImage?.sourceUrl || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=1920&q=80'}
             alt={`${brand} ${model}`}
             className="w-full h-full object-cover"
           />
