@@ -8,7 +8,7 @@ import Footer from '../../components/Footer';
 const brands = [
   {
     name: 'BMW',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/200px-BMW.svg.png',
+    logo: 'https://logo.clearbit.com/bmw.com',
     description: 'The Ultimate Driving Machine. BMW combines sporty performance with luxury comfort.',
     vehicleCount: 45,
     featured: 'M4 Competition',
@@ -17,7 +17,7 @@ const brands = [
   },
   {
     name: 'Mercedes-Benz',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/200px-Mercedes-Logo.svg.png',
+    logo: 'https://logo.clearbit.com/mercedes-benz.com',
     description: 'The Best or Nothing. Mercedes-Benz defines luxury automotive excellence.',
     vehicleCount: 52,
     featured: 'S-Class',
@@ -26,7 +26,7 @@ const brands = [
   },
   {
     name: 'Audi',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo.svg/200px-Audi-Logo.svg.png',
+    logo: 'https://logo.clearbit.com/audi.com',
     description: 'Vorsprung durch Technik. Audi delivers cutting-edge technology and refined luxury.',
     vehicleCount: 38,
     featured: 'RS e-tron GT',
@@ -35,7 +35,7 @@ const brands = [
   },
   {
     name: 'Porsche',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Porsche_logo.svg/200px-Porsche_logo.svg.png',
+    logo: 'https://logo.clearbit.com/porsche.com',
     description: 'There is No Substitute. Porsche is the epitome of sports car excellence.',
     vehicleCount: 28,
     featured: '911 GT3',
@@ -44,7 +44,7 @@ const brands = [
   },
   {
     name: 'Tesla',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Tesla_logo.svg/200px-Tesla_logo.svg.png',
+    logo: 'https://logo.clearbit.com/tesla.com',
     description: 'Accelerating the World\'s Transition to Sustainable Energy.',
     vehicleCount: 15,
     featured: 'Model S Plaid',
@@ -53,7 +53,7 @@ const brands = [
   },
   {
     name: 'Lamborghini',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Lamborghini_Logo.svg/200px-Lamborghini_Logo.svg.png',
+    logo: 'https://logo.clearbit.com/lamborghini.com',
     description: 'Expect the Unexpected. Lamborghini creates extreme supercars.',
     vehicleCount: 12,
     featured: 'Huracán STO',
@@ -62,7 +62,7 @@ const brands = [
   },
   {
     name: 'Ferrari',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Ferrari_Logo.svg/200px-Ferrari_Logo.svg.png',
+    logo: 'https://logo.clearbit.com/ferrari.com',
     description: 'Prancing Horse. Ferrari is the essence of Italian performance.',
     vehicleCount: 8,
     featured: '296 GTB',
@@ -71,7 +71,7 @@ const brands = [
   },
   {
     name: 'Rolls-Royce',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Rolls-Royce_logo.svg/200px-Rolls-Royce_logo.svg.png',
+    logo: 'https://logo.clearbit.com/rolls-royce.com',
     description: 'Putting the World\'s Best Cars on the Road. Ultimate luxury and bespoke craftsmanship.',
     vehicleCount: 5,
     featured: 'Phantom',
