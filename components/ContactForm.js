@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const vehicleTypes = [
   'Sedan',
@@ -15,6 +16,13 @@ const vehicleTypes = [
   'Not Sure',
 ];
 
+// EmailJS configuration - Replace with your actual credentials
+const EMAILJS_CONFIG = {
+  serviceId: 'YOUR_SERVICE_ID',
+  templateId: 'YOUR_TEMPLATE_ID',
+  publicKey: 'YOUR_PUBLIC_KEY',
+};
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -24,10 +32,10 @@ export default function ContactForm() {
     vehicleType: '',
     message: '',
     preferredContact: 'email',
-    interestedVehicles: [],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,27 +45,51 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Prepare the email template parameters
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        vehicle_type: formData.vehicleType || 'Not specified',
+        message: formData.message,
+        preferred_contact: formData.preferredContact,
+        to_email: 'jcpandi@gmail.com',
+      };
 
-    setSubmitStatus('success');
-    setIsSubmitting(false);
+      // Send email using EmailJS
+      // Note: Replace the config values with your actual EmailJS credentials
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        templateParams,
+        EMAILJS_CONFIG.publicKey
+      );
 
-    // Reset form after success
-    setTimeout(() => {
-      setSubmitStatus(null);
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        vehicleType: '',
-        message: '',
-        preferredContact: 'email',
-        interestedVehicles: [],
-      });
-    }, 3000);
+      setSubmitStatus('success');
+      
+      // Reset form after success
+      setTimeout(() => {
+        setSubmitStatus(null);
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          vehicleType: '',
+          message: '',
+          preferredContact: 'email',
+        });
+      }, 3000);
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      setErrorMessage('Failed to send message. Please try again or contact us directly.');
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -86,6 +118,28 @@ export default function ContactForm() {
           <p className="text-gray-400">
             Thank you for your inquiry. We'll get back to you within 24 hours.
           </p>
+        </motion.div>
+      ) : submitStatus === 'error' ? (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center py-12"
+        >
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Send size={32} className="text-red-500" />
+          </div>
+          <h4 className="text-xl font-semibold text-white mb-2">
+            Message Failed to Send
+          </h4>
+          <p className="text-gray-400 mb-4">{errorMessage}</p>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setSubmitStatus(null)}
+            className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors"
+          >
+            Try Again
+          </motion.button>
         </motion.div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
