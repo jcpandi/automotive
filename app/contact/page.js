@@ -64,7 +64,7 @@ export default function ContactPage() {
       {/* Contact Info Cards */}
       <section className="py-20 bg-dark-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
             {contactInfo.map((info, index) => (
               <motion.div
                 key={info.title}
@@ -72,28 +72,28 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-dark-200 rounded-xl p-6 hover:bg-dark-100 transition-colors"
+                className="bg-dark-200 rounded-xl p-4 hover:bg-dark-100 transition-colors h-full"
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary-600/20 rounded-lg">
-                    <info.icon size={24} className="text-primary-500" />
+                <div className="flex flex-col items-center text-center h-full">
+                  <div className="p-3 bg-primary-600/20 rounded-lg mb-3">
+                    <info.icon size={22} className="text-primary-500" />
                   </div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1">{info.title}</h4>
+                  <h4 className="text-white font-semibold text-sm mb-1">{info.title}</h4>
+                  <div className="space-y-0.5">
                     {info.details.map((detail) => (
-                      <p key={detail} className="text-gray-300 text-sm">
+                      <p key={detail} className="text-gray-300 text-xs">
                         {detail}
                       </p>
                     ))}
-                    <p className="text-gray-500 text-xs mt-2">{info.subtext}</p>
                   </div>
+                  <p className="text-gray-500 text-xs mt-2">{info.subtext}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
           {/* Contact Form and Map */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -115,17 +115,17 @@ export default function ContactPage() {
                 />
                 <div className="absolute inset-0 bg-dark-300/80" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-20 h-20 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <MapPin size={40} className="text-white" />
+                  <div className="text-center p-6 sm:p-8">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                      <MapPin size={32} className="text-white sm:size-40" />
                     </div>
-                    <h3 className="text-2xl font-display font-bold text-white mb-2">
+                    <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-2">
                       Visit Our Showroom
                     </h3>
-                    <p className="text-gray-300 mb-4">
+                    <p className="text-gray-300 mb-3 sm:mb-4">
                       Experience our premium vehicles in person
                     </p>
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 text-sm sm:text-base">
                       123 Automotive Blvd<br />
                       Los Angeles, CA 90001
                     </p>
