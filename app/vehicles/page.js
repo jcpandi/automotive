@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, ArrowUpDown } from 'lucide-react';
+import { Filter, ArrowUpDown, ChevronDown } from 'lucide-react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import VehicleCard from '../../components/VehicleCard';
@@ -348,6 +349,56 @@ const filters = {
 };
 
 export default function VehiclesPage() {
+  const [selectedType, setSelectedType] = useState('All');
+  const [selectedBrand, setSelectedBrand] = useState('All');
+  const [sortBy, setSortBy] = useState('featured');
+  const [showBrandDropdown, setShowBrandDropdown] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+
+  // Filter and sort vehicles
+  const filteredVehicles = useMemo(() => {
+    let result = [...vehicles];
+
+    // Filter by type
+    if (selectedType !== 'All') {
+      result = result.filter(v => v.vehicleFields.type === selectedType);
+    }
+
+    // Filter by brand
+    if (selectedBrand !== 'All') {
+      result = result.filter(v => v.vehicleFields.brand === selectedBrand);
+    }
+
+    // Sort vehicles
+    switch (sortBy) {
+      case 'price-low':
+        result.sort((a, b) => a.vehicleFields.price - b.vehicleFields.price);
+        break;
+      case 'price-high':
+        result.sort((a, b) => b.vehicleFields.price - a.vehicleFields.price);
+        break;
+      case 'year-new':
+        result.sort((a, b) => b.vehicleFields.year - a.vehicleFields.year);
+        break;
+      case 'name-a':
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      default:
+        // Featured - keep original order
+        break;
+    }
+
+    return result;
+  }, [selectedType, selectedBrand, sortBy]);
+
+  const sortOptions = [
+    { value: 'featured', label: 'Featured' },
+    { value: 'price-low', label: 'Price: Low to High' },
+    { value: 'price-high', label: 'Price: High to Low' },
+    { value: 'year-new', label: 'Newest First' },
+    { value: 'name-a', label: 'Name: A-Z' },
+  ];
+
   return (
     <div className="min-h-screen bg-dark-300">
       <Header />
@@ -376,17 +427,18 @@ export default function VehiclesPage() {
       </section>
 
       {/* Filters */}
-      <section className="py-6 bg-dark-300 sticky top-20 z-40">
+      <section className="py-6 bg-dark-300 sticky top-20 z-40 border-b border-dark-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               {filters.types.map((type) => (
                 <motion.button
                   key={type}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedType(type)}
                   className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                    type === 'All'
+                    selectedType === type
                       ? 'bg-primary-600 text-white'
                       : 'bg-dark-200 text-gray-300 hover:bg-dark-100 hover:text-white'
                   }`}
@@ -395,38 +447,184 @@ export default function VehiclesPage() {
                 </motion.button>
               ))}
             </div>
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-dark-200 text-gray-300 hover:bg-dark-100 rounded-lg transition-colors"
-              >
-                <Filter size={16} />
-                <span>More Filters</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-dark-200 text-gray-300 hover:bg-dark-100 rounded-lg transition-colors"
-              >
-                <ArrowUpDown size={16} />
-                <span>Sort</span>
-              </motion.button>
+            <div className="flex items-center gap-3">
+              {/* Brand Dropdown */}
+              <div className="relative">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowBrandDropdown(!showBrandDropdown)}
+                  className="flex items-center gap-2 px-4 py-2 bg-dark-200 text-gray-300 hover:bg-dark-100 rounded-lg transition-colors"
+                >
+                  <span>{selectedBrand === 'All' ? 'All Brands' : selectedBrand}</span>
+                  <ChevronDown size={16} className={`transition-transform ${showBrandDropdown ? 'rotate-180' : ''}`} />
+                </motion.button>
+                {showBrandDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 mt-2 w-48 bg-dark-200 rounded-lg shadow-xl border border-dark-100 overflow-hidden z-50"
+                  >
+                    {filters.brands.map((brand) => (
+                      <button
+                        key={brand}
+                        onClick={() => {
+                          setSelectedBrand(brand);
+                          setShowBrandDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm transition-colors ${
+                          selectedBrand === brand
+                            ? 'bg-primary-600 text-white'
+                            : 'text-gray-300 hover:bg-dark-100'
+                        }`}
+                      >
+                        {brand}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Sort Dropdown */}
+              <div className="relative">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowSortDropdown(!showSortDropdown)}
+                  className="flex items-center gap-2 px-4 py-2 bg-dark-200 text-gray-300 hover:bg-dark-100 rounded-lg transition-colors"
+                >
+                  <ArrowUpDown size={16} />
+                  <span>{sortOptions.find(o => o.value === sortBy)?.label}</span>
+                  <ChevronDown size={16} className={`transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+                </motion.button>
+                {showSortDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 mt-2 w-48 bg-dark-200 rounded-lg shadow-xl border border-dark-100 overflow-hidden z-50"
+                  >
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSortBy(option.value);
+                          setShowSortDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm transition-colors ${
+                          sortBy === option.value
+                            ? 'bg-primary-600 text-white'
+                            : 'text-gray-300 hover:bg-dark-100'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
             </div>
           </div>
+
+          {/* Active Filters */}
+          {(selectedType !== 'All' || selectedBrand !== 'All') && (
+            <div className="mt-4 flex items-center gap-3">
+              <span className="text-gray-400 text-sm">Active filters:</span>
+              {selectedType !== 'All' && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-primary-600/20 text-primary-500 text-sm rounded-full"
+                >
+                  {selectedType}
+                  <button
+                    onClick={() => setSelectedType('All')}
+                    className="hover:text-primary-400"
+                  >
+                    ×
+                  </button>
+                </motion.span>
+              )}
+              {selectedBrand !== 'All' && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-primary-600/20 text-primary-500 text-sm rounded-full"
+                >
+                  {selectedBrand}
+                  <button
+                    onClick={() => setSelectedBrand('All')}
+                    className="hover:text-primary-400"
+                  >
+                    ×
+                  </button>
+                </motion.span>
+              )}
+              <button
+                onClick={() => {
+                  setSelectedType('All');
+                  setSelectedBrand('All');
+                  setSortBy('featured');
+                }}
+                className="text-gray-400 hover:text-white text-sm underline"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Vehicles Grid */}
       <section className="py-12 bg-dark-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {vehicles.map((vehicle, index) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
-            ))}
-          </div>
+          {filteredVehicles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredVehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle.id} vehicle={vehicle} index={index} />
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20"
+            >
+              <div className="w-20 h-20 bg-dark-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Filter size={40} className="text-gray-500" />
+              </div>
+              <h3 className="text-2xl font-display font-bold text-white mb-2">
+                No vehicles found
+              </h3>
+              <p className="text-gray-400 mb-6">
+                Try adjusting your filters to find what you're looking for.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setSelectedType('All');
+                  setSelectedBrand('All');
+                  setSortBy('featured');
+                }}
+                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                Clear Filters
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </section>
+
+      {/* Results Count */}
+      {filteredVehicles.length > 0 && (
+        <section className="pb-8 bg-dark-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-gray-400 text-sm">
+              Showing {filteredVehicles.length} vehicle{filteredVehicles.length !== 1 ? 's' : ''}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Load More */}
       <section className="py-12 bg-dark-300">
