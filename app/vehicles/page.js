@@ -354,10 +354,23 @@ export default function VehiclesPage() {
   const [sortBy, setSortBy] = useState('featured');
   const [showBrandDropdown, setShowBrandDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Filter and sort vehicles
   const filteredVehicles = useMemo(() => {
     let result = [...vehicles];
+
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(v =>
+        v.title.toLowerCase().includes(query) ||
+        v.vehicleFields.brand.toLowerCase().includes(query) ||
+        v.vehicleFields.model.toLowerCase().includes(query) ||
+        v.vehicleFields.type.toLowerCase().includes(query) ||
+        v.vehicleFields.engine.toLowerCase().includes(query)
+      );
+    }
 
     // Filter by type
     if (selectedType !== 'All') {
@@ -389,7 +402,7 @@ export default function VehiclesPage() {
     }
 
     return result;
-  }, [selectedType, selectedBrand, sortBy]);
+  }, [selectedType, selectedBrand, sortBy, searchQuery]);
 
   const sortOptions = [
     { value: 'featured', label: 'Featured' },
