@@ -13,6 +13,7 @@ const vehicles = [
     id: '1',
     title: 'BMW M4 Competition',
     slug: 'bmw-m4-competition',
+    featured: true,
     vehicleFields: {
       brand: 'BMW',
       model: 'M4 Competition',
@@ -32,6 +33,7 @@ const vehicles = [
     id: '4',
     title: 'Porsche 911 GT3',
     slug: 'porsche-911-gt3',
+    featured: true,
     vehicleFields: {
       brand: 'Porsche',
       model: '911 GT3',
@@ -51,6 +53,7 @@ const vehicles = [
     id: '6',
     title: 'Lamborghini Huracán',
     slug: 'lamborghini-huracan',
+    featured: true,
     vehicleFields: {
       brand: 'Lamborghini',
       model: 'Huracán STO',
@@ -70,6 +73,7 @@ const vehicles = [
     id: '16',
     title: 'Ferrari Roma',
     slug: 'ferrari-roma',
+    featured: true,
     vehicleFields: {
       brand: 'Ferrari',
       model: 'Roma',
@@ -91,6 +95,7 @@ const vehicles = [
     id: '2',
     title: 'Mercedes-Benz S-Class',
     slug: 'mercedes-s-class',
+    featured: true,
     vehicleFields: {
       brand: 'Mercedes-Benz',
       model: 'S-Class',
@@ -150,6 +155,7 @@ const vehicles = [
     id: '3',
     title: 'Tesla Model S Plaid',
     slug: 'tesla-model-s-plaid',
+    featured: true,
     vehicleFields: {
       brand: 'Tesla',
       model: 'Model S Plaid',
@@ -384,6 +390,14 @@ export default function VehiclesPage() {
 
     // Sort vehicles
     switch (sortBy) {
+      case 'featured':
+        // Sort featured vehicles first, then by price descending
+        result.sort((a, b) => {
+          if (a.featured && !b.featured) return -1;
+          if (!a.featured && b.featured) return 1;
+          return b.vehicleFields.price - a.vehicleFields.price;
+        });
+        break;
       case 'price-low':
         result.sort((a, b) => a.vehicleFields.price - b.vehicleFields.price);
         break;
@@ -444,6 +458,22 @@ export default function VehiclesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-3">
+              {/* All Brands Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setSelectedType('All');
+                  setSelectedBrand('All');
+                }}
+                className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                  selectedType === 'All' && selectedBrand === 'All'
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-dark-200 text-gray-300 hover:bg-dark-100 hover:text-white'
+                }`}
+              >
+                All Brands
+              </motion.button>
               {filters.types.map((type) => (
                 <motion.button
                   key={type}
@@ -451,7 +481,7 @@ export default function VehiclesPage() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedType(type)}
                   className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                    selectedType === type
+                    selectedType === type && selectedBrand === 'All'
                       ? 'bg-primary-600 text-white'
                       : 'bg-dark-200 text-gray-300 hover:bg-dark-100 hover:text-white'
                   }`}
